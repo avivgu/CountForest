@@ -41,6 +41,12 @@ resource "aws_ebs_snapshot" "example_snapshot" {
   }
 }
 
+resource "aws_volume_attachment" "ebs_att" {
+  device_name = "/dev/sdh"
+  volume_id   = "${aws_ebs_volume.web_host_storage.id}"
+  instance_id = "${aws_instance.web_host.id}"
+}
+
 resource "aws_security_group" "web-node" {
   # security group is open to the world in SSH port
   name        = "${local.resource_prefix.value}-sg"
