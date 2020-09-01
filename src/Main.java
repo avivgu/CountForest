@@ -11,10 +11,12 @@ public class Main {
             return 1;
         }
         if (angle < 0){ // can also throw an error...
+
             angle = angle * -1;
+
         }
         if (angle == 360.0){
-            return forest.size();
+            return forest.size(); //check check
         }
         //calculate the degree from center to each tree
         for (Tree t : forest){
