@@ -6,6 +6,7 @@ resource "aws_instance" "web_host" {
   vpc_security_group_ids = [
     "${aws_security_group.web-node.id}"]
   subnet_id = "${aws_subnet.web_subnet.id}"
+  
   user_data = <<EOF
 #! /bin/bash
 sudo apt-get update
@@ -26,6 +27,7 @@ resource "aws_ebs_volume" "web_host_storage" {
   availability_zone = "${var.availability_zone}"
   size = 1
   tags = {
+    
     Name = "${local.resource_prefix.value}-ebs"
   }
 }
@@ -35,6 +37,7 @@ resource "aws_ebs_snapshot" "example_snapshot" {
   volume_id   = "${aws_ebs_volume.web_host_storage.id}"
   description = "${local.resource_prefix.value}-ebs-snapshot"
   tags = {
+    
     Name = "${local.resource_prefix.value}-ebs-snapshot"
   }
 }
@@ -43,6 +46,7 @@ resource "aws_security_group" "web-node" {
   # security group is open to the world in SSH port
   name        = "${local.resource_prefix.value}-sg"
   description = "${local.resource_prefix.value} Security Group"
+  
   vpc_id      = aws_vpc.web_vpc.id
 
   ingress {
@@ -72,6 +76,7 @@ resource "aws_security_group" "web-node" {
 resource "aws_vpc" "web_vpc" {
   cidr_block           = "172.16.0.0/16"
   enable_dns_hostnames = true
+  
   enable_dns_support   = true
   tags = {
     Name = "${local.resource_prefix.value}-vpc"
@@ -104,6 +109,7 @@ resource "aws_subnet" "web_subnet2" {
 resource "aws_internet_gateway" "web_igw" {
   vpc_id = aws_vpc.web_vpc.id
 
+  
   tags = {
     Name = "${local.resource_prefix.value}-igw"
   }
@@ -114,6 +120,7 @@ resource "aws_route_table" "web_rtb" {
 
   tags = {
     Name = "${local.resource_prefix.value}-rtb"
+    
   }
 }
 
@@ -163,6 +170,7 @@ resource "aws_flow_log" "vpcflowlogs" {
 resource "aws_s3_bucket" "flowbucket" {
   bucket        = "${local.resource_prefix.value}-flowlogs"
   force_destroy = true
+  
 
   tags = {
     Name        = "${local.resource_prefix.value}-flowlogs"
@@ -172,12 +180,14 @@ resource "aws_s3_bucket" "flowbucket" {
 
 output "ec2_public_dns" {
   description = "Web Host Public DNS name"
+  
   value       = aws_instance.web_host.public_dns
 }
 
 output "vpc_id" {
   description = "The ID of the VPC"
   value       = aws_vpc.web_vpc.id
+  
 }
 
 output "public_subnet" {
@@ -187,6 +197,7 @@ output "public_subnet" {
 }
 
 output "public_subnet2" {
+  
   description = "The ID of the Public subnet"
   value       = aws_subnet.web_subnet2.id
 }
