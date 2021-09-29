@@ -16,6 +16,8 @@ EOF
   tags = {
     Name = "${local.resource_prefix.value}-ec2"
   }
+  ebs_optimized = true
+  monitoring = true
 }
 
 resource "aws_ebs_volume" "web_host_storage" {
