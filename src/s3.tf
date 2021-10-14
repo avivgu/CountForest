@@ -46,7 +46,7 @@ resource "aws_s3_bucket" "financials" {
   # bucket does not have versioning
   bucket        = "${local.resource_prefix.value}-financials"
   acl           = "private"
-  force_destroy = true
+  force_destroy = false
   tags = merge({
     Name        = "${local.resource_prefix.value}-financials"
     Environment = local.resource_prefix.value
@@ -69,9 +69,9 @@ resource "aws_s3_bucket" "operations" {
   bucket = "${local.resource_prefix.value}-operations"
   acl    = "private"
   versioning {
-    enabled = true
+    enabled = false
   }
-  force_destroy = true
+  force_destroy = false
   tags = merge({
     Name        = "${local.resource_prefix.value}-operations"
     Environment = local.resource_prefix.value
