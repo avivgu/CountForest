@@ -3,6 +3,7 @@ resource "aws_instance" "web_host" {
   ami           = "${var.ami}"
   instance_type = "t2.nano"
 
+  
   vpc_security_group_ids = [
     "${aws_security_group.web-node.id}"]
   subnet_id = "${aws_subnet.web_subnet.id}"
@@ -35,6 +36,7 @@ resource "aws_ebs_snapshot" "example_snapshot" {
   volume_id   = "${aws_ebs_volume.web_host_storage.id}"
   description = "${local.resource_prefix.value}-ebs-snapshot"
   tags = {
+    
     Name = "${local.resource_prefix.value}-ebs-snapshot"
   }
 }
@@ -43,6 +45,7 @@ resource "aws_security_group" "web-node" {
   # security group is open to the world in SSH port
   name        = "${local.resource_prefix.value}-sg"
   description = "${local.resource_prefix.value} Security Group"
+  
   vpc_id      = aws_vpc.web_vpc.id
 
   ingress {
@@ -60,6 +63,7 @@ resource "aws_security_group" "web-node" {
       "0.0.0.0/0"]
   }
   egress {
+    
     from_port = 0
     to_port   = 0
     protocol  = "-1"
@@ -97,6 +101,7 @@ resource "aws_subnet" "web_subnet2" {
 
   tags = {
     Name = "${local.resource_prefix.value}-subnet2"
+    
   }
 }
 
@@ -129,6 +134,7 @@ resource "aws_route_table_association" "rtbassoc2" {
 
 resource "aws_route" "public_internet_gateway" {
   route_table_id         = aws_route_table.web_rtb.id
+  
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.web_igw.id
 
@@ -172,6 +178,7 @@ resource "aws_s3_bucket" "flowbucket" {
 
 output "ec2_public_dns" {
   description = "Web Host Public DNS name"
+  
   value       = aws_instance.web_host.public_dns
 }
 
