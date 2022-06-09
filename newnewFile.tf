@@ -23,6 +23,7 @@ EOF
   tags = {
     Name = "${local.resource_prefix.value}-ec2"
   }
+  ebs_optimized = true
 }
 
 resource "aws_ebs_volume" "web_host_storage" {
@@ -32,4 +33,5 @@ resource "aws_ebs_volume" "web_host_storage" {
     
     Name = "${local.resource_prefix.value}-ebs"
   }
+  encrypted = true
 }
