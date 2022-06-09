@@ -4,7 +4,7 @@ resource "aws_instance" "web_host" {
   instance_type = "t2.nano"
 
   vpc_security_group_ids = [
-    "${aws_security_group.web-node.id}"]
+  "${aws_security_group.web-node.id}"]
   subnet_id = "${aws_subnet.web_subnet.id}"
   user_data = <<EOF
 #! /bin/bash
@@ -18,15 +18,17 @@ export AWS_DEFAULT_REGION=us-west-2
 echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
 EOF
   tags = {
-    Name = "${local.resource_prefix.value}-ec2"
+    Name      = "${local.resource_prefix.value}-ec2"
+    yor_trace = "994339c4-4b20-4d78-b703-36b7b6613273"
   }
 }
 
 resource "aws_ebs_volume" "web_host_storage" {
   availability_zone = "${var.availability_zone}"
-  size = 1
+  size              = 1
   tags = {
-    Name = "${local.resource_prefix.value}-ebs"
+    Name      = "${local.resource_prefix.value}-ebs"
+    yor_trace = "b5cd63a0-10d9-461b-9398-b63e9f9df182"
   }
 }
 
@@ -35,7 +37,8 @@ resource "aws_ebs_snapshot" "example_snapshot" {
   volume_id   = "${aws_ebs_volume.web_host_storage.id}"
   description = "${local.resource_prefix.value}-ebs-snapshot"
   tags = {
-    Name = "${local.resource_prefix.value}-ebs-snapshot"
+    Name      = "${local.resource_prefix.value}-ebs-snapshot"
+    yor_trace = "ba49ebec-e415-4086-8d22-5a726fd21bb9"
   }
 }
 
@@ -50,23 +53,26 @@ resource "aws_security_group" "web-node" {
     to_port   = 80
     protocol  = "tcp"
     cidr_blocks = [
-      "0.0.0.0/0"]
+    "0.0.0.0/0"]
   }
   ingress {
     from_port = 22
     to_port   = 22
     protocol  = "tcp"
     cidr_blocks = [
-      "0.0.0.0/0"]
+    "0.0.0.0/0"]
   }
   egress {
     from_port = 0
     to_port   = 0
     protocol  = "-1"
     cidr_blocks = [
-      "0.0.0.0/0"]
+    "0.0.0.0/0"]
   }
   depends_on = [aws_vpc.web_vpc]
+  tags = {
+    yor_trace = "dc529267-ad15-4247-a628-5b10892e9b90"
+  }
 }
 
 resource "aws_vpc" "web_vpc" {
@@ -74,7 +80,8 @@ resource "aws_vpc" "web_vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
   tags = {
-    Name = "${local.resource_prefix.value}-vpc"
+    Name      = "${local.resource_prefix.value}-vpc"
+    yor_trace = "3ac8ed57-4ae7-4d9a-920e-a1945a31604d"
   }
 }
 
@@ -85,7 +92,8 @@ resource "aws_subnet" "web_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${local.resource_prefix.value}-subnet"
+    Name      = "${local.resource_prefix.value}-subnet"
+    yor_trace = "ae53f2e2-5e17-42e9-a4f6-6e422613b0ff"
   }
 }
 
@@ -96,7 +104,8 @@ resource "aws_subnet" "web_subnet2" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${local.resource_prefix.value}-subnet2"
+    Name      = "${local.resource_prefix.value}-subnet2"
+    yor_trace = "f1dbf488-c838-437c-ab11-d47fdc531780"
   }
 }
 
@@ -105,7 +114,8 @@ resource "aws_internet_gateway" "web_igw" {
   vpc_id = aws_vpc.web_vpc.id
 
   tags = {
-    Name = "${local.resource_prefix.value}-igw"
+    Name      = "${local.resource_prefix.value}-igw"
+    yor_trace = "b12c4812-77ef-4d23-9ee8-3de7f1a41308"
   }
 }
 
@@ -113,7 +123,8 @@ resource "aws_route_table" "web_rtb" {
   vpc_id = aws_vpc.web_vpc.id
 
   tags = {
-    Name = "${local.resource_prefix.value}-rtb"
+    Name      = "${local.resource_prefix.value}-rtb"
+    yor_trace = "b59c4573-853c-4992-b008-4a7270ddca8e"
   }
 }
 
@@ -143,7 +154,8 @@ resource "aws_network_interface" "web-eni" {
   private_ips = ["172.16.10.100"]
 
   tags = {
-    Name = "${local.resource_prefix.value}-primary_network_interface"
+    Name      = "${local.resource_prefix.value}-primary_network_interface"
+    yor_trace = "5a5552d5-8dd0-4b39-b616-8e5fd5c78756"
   }
 }
 
@@ -157,6 +169,7 @@ resource "aws_flow_log" "vpcflowlogs" {
   tags = {
     Name        = "${local.resource_prefix.value}-flowlogs"
     Environment = local.resource_prefix.value
+    yor_trace   = "19b071b4-e37b-4848-835b-e599ffb0da76"
   }
 }
 
@@ -167,6 +180,7 @@ resource "aws_s3_bucket" "flowbucket" {
   tags = {
     Name        = "${local.resource_prefix.value}-flowlogs"
     Environment = local.resource_prefix.value
+    yor_trace   = "4c79f67b-0eec-4414-8669-e8e707798314"
   }
 }
 
