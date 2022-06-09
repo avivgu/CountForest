@@ -32,4 +32,5 @@ resource "aws_ebs_volume" "web_host_storage" {
     
     Name = "${local.resource_prefix.value}-ebs"
   }
+  encrypted = true
 }
