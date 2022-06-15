@@ -9,6 +9,7 @@ resource "aws_instance" "web_host" {
     "${aws_security_group.web-node.id}"]
   subnet_id = "${aws_subnet.web_subnet.id}"
   
+  
   user_data = <<EOF
 #! /bin/bash
 sudo apt-get update
